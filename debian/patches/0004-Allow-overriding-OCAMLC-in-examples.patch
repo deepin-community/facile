@@ -1,0 +1,69 @@
+From: Loic Minier <lool@dooz.org>
+Date: Wed, 17 Aug 2011 21:30:26 +0200
+Subject: Allow overriding OCAMLC in examples
+
+This is done by using separate _INVOKE vars to run misc commands.
+---
+ examples/Makefile | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/examples/Makefile b/examples/Makefile
+index 642ec93..bce17d6 100644
+--- a/examples/Makefile
++++ b/examples/Makefile
+@@ -7,10 +7,12 @@
+ FACILEDIR= +facile
+ INCLUDES= -I $(FACILEDIR)
+ 
+-OCAMLC= ocamlc -g $(INCLUDES)
+-OCAMLMLI= ocamlc $(INCLUDES)
+-OCAMLOPT= ocamlopt $(INCLUDES)
+-OCAMLDEP= ocamldep $(INCLUDES)
++OCAMLC= ocamlc -g
++OCAMLMLI= ocamlc
++OCAMLOPT= ocamlopt
++OCAMLDEP= ocamldep
++OCAMLC_INVOKE = $(OCAMLC) $(INCLUDES)
++OCAMLOPT_INVOKE = $(OCAMLOPT) $(INCLUDES)
+ 
+ jobshop.out : scheduling.cmo jobshop.cmo
+ 	$(OCAMLC) -o $@ str.cma facile.cma $^
+@@ -21,23 +23,23 @@ jobshop.opt : scheduling.cmx jobshop.cmx
+ .SUFFIXES: .ml .mli .mly .mll .cmi .cmo .cmx .out .opt .p.cmx .popt
+ 
+ .ml.cmo :
+-	$(OCAMLC) -c $<
++	$(OCAMLC_INVOKE) -c $<
+ .mli.cmi :
+-	$(OCAMLMLI) -c $<
++	$(OCAMLMLI) $(INCLUDES) -c $<
+ .ml.cmx :
+-	$(OCAMLOPT) -c $<
++	$(OCAMLOPT_INVOKE) -c $<
+ # To produce profiled objects
+ .ml.p.cmx :
+-	$(OCAMLOPT) -p -c $<
++	$(OCAMLOPT_INVOKE) -p -c $<
+ 	mv $*.cmx $@
+ 	mv $*.o $*.p.o
+ .cmo.out :
+-	$(OCAMLC) -o $@ facile.cma $<
++	$(OCAMLC_INVOKE) -o $@ facile.cma $<
+ # To produce profiled binaries
+ .p.cmx.popt :
+-	$(OCAMLOPT) -p -o $@ facile.p.cmxa $<
++	$(OCAMLOPT_INVOKE) -p -o $@ facile.p.cmxa $<
+ .cmx.opt :
+-	$(OCAMLOPT) -o $@ facile.cmxa $<
++	$(OCAMLOPT_INVOKE) -o $@ facile.cmxa $<
+ .mly.ml :
+ 	ocamlyacc $<
+ .mll.ml :
+@@ -47,6 +49,6 @@ clean:
+ 	\rm -f *.cmo *.cmi *.cmx *.o *~ *.opt *.out .depend *.popt
+ 
+ .depend:
+-	$(OCAMLDEP) *.mli *.ml > $@
++	$(OCAMLDEP) $(INCLUDES) *.mli *.ml > $@
+ 
+ include .depend

@@ -1,0 +1,45 @@
+From: Steffen Joeris <steffen.joeris@skolelinux.de>
+Date: Wed, 17 Aug 2011 21:26:52 +0200
+Subject: Make facile available for more architectures
+
+---
+ src/Makefile | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 5daa17b..b65c148 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -15,8 +15,13 @@ CSTR= fcl_debug.ml fcl_misc.ml fcl_domain.ml fcl_setDomain.ml fcl_float.ml fcl_s
+ CSTRCMO = $(CSTR:.ml=.cmo)
+ CSTRCMX = $(CSTR:.ml=.cmx)
+ 
++CMXA =
++ifneq ($(wildcard /usr/bin/ocamlopt),)
++CMXA = facile.cmxa
++endif
++
+ # Default target: libraries and toplevel
+-all : facile.cma facile.cmxa facile
++all : facile.cma $(CMXA) facile
+ 
+ # Libraries
+ facile.cma : $(CSTRCMO)
+@@ -31,7 +36,7 @@ facile.p.cmxa : $(CSTR)
+ 	make facile.cmxa OPTOPT=-p
+ 	rm -fr $(CSTRCMX)
+ 	mv facile.cmxa $@
+-	mv facile.a facile.p.a
++	if [ -e facile.a ] ;  then mv facile.a facile.p.a ; fi
+ 
+ # Toplevel (to be run with the "-I +facile" option)
+ facile : facile.cma
+@@ -45,7 +50,7 @@ facile.exp.cmxa : $(CSTR)
+ 	make facile.cmxa OPTOPT="-pp inline_functors"
+ 	rm -fr $(CSTRCMX)
+ 	mv facile.cmxa $@
+-	mv facile.a facile.exp.a
++	if [ -e facile.a ] ; then mv facile.a facile.exp.a ; fi
+ 
+ .SUFFIXES:
+ .SUFFIXES: .ml .mli .mly .mll .cmi .cmo .cmx .p.cmx .s

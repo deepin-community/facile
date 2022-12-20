@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+include /usr/share/ocaml/ocamlvars.mk
+
+FACILEDIR := $(shell ocamlc -where)/facile
+VERSION := $(shell head -n1 debian/changelog | awk -F'[ ()-]+' '{print $$2}')
+
+%:
+	dh $@ --with ocaml
+
+override_dh_auto_configure:
+	./configure --faciledir debian/libfacile-ocaml-dev/$(FACILEDIR)
+	sed 's/@VERSION@/$(VERSION)/' debian/META.in > $(CURDIR)/META
+
+override_dh_auto_build:
+	$(MAKE) OCAMLC="ocamlc -g" OCAMLMLI=ocamlc
+
+override_dh_auto_install:
+	mkdir -p debian/libfacile-ocaml-dev/$(FACILEDIR)
+	dh_auto_install
+
+override_dh_auto_clean:
+	$(MAKE) -C src clean
+	rm -f META
+	# not cleaned upstream
+	rm -f config_Makefile
+	$(MAKE) -k -C examples clean

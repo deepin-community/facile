@@ -1,0 +1,6 @@
+name="facile"
+version="@VERSION@"
+description="functional constraint library implemented in Objective Caml"
+requires=""
+archive(byte)="facile.cma"
+archive(native)="facile.cmxa"

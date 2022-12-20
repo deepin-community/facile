@@ -1,0 +1,18 @@
+From: Loic Minier <lool@dooz.org>
+Date: Wed, 17 Aug 2011 21:29:27 +0200
+Subject: ocamlopt isn't available on all arches; don't use it for make check
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 78a6dfe..0854fb2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,4 +24,4 @@ distclean uninstall:
+ 	rm -fr $(FACILEDIR)
+ 
+ check:
+-	cd examples; make FACILEDIR=../src queens.opt; ./queens.opt 8
++	cd examples; $(MAKE) FACILEDIR=../src queens.out && ./queens.out 8

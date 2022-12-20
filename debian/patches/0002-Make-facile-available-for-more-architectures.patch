@@ -1,0 +1,33 @@
+From: Steffen Joeris <steffen.joeris@skolelinux.de>
+Date: Wed, 17 Aug 2011 21:28:29 +0200
+Subject: Make facile available for more architectures
+
+---
+ Makefile | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1f15b06..78a6dfe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,11 +7,15 @@ compile:
+ 
+ install:
+ 	if test -d $(FACILEDIR); then : ; else mkdir $(FACILEDIR); fi
+-	cp src/facile.cmi src/facile.cma src/facile.cmxa src/facile.a $(FACILEDIR)
+-	chmod a+r $(FACILEDIR)/facile.cmi
+-	chmod a+r $(FACILEDIR)/facile.cma
+-	chmod a+r $(FACILEDIR)/facile.cmxa
+-	chmod a+r $(FACILEDIR)/facile.a
++	install -m 644 src/*.mli $(FACILEDIR)
++	if [ -e src/facile.cmi ] ; then cp src/facile.cmi $(FACILEDIR) ; fi
++	if [ -e src/facile.cma ] ; then cp src/facile.cma $(FACILEDIR) ; fi
++	if [ -e src/facile.a ] ; then cp src/facile.a $(FACILEDIR) ; fi
++	if [ -e src/facile.cmxa ] ; then cp src/facile.cmxa $(FACILEDIR) ; fi
++	if [ -e $(FACILEDIR)/facile.cmi ] ; then chmod a+r $(FACILEDIR)/facile.cmi ; fi
++	if [ -e $(FACILEDIR)/facile.cma ] ; then chmod a+r $(FACILEDIR)/facile.cma ; fi
++	if [ -e $(FACILEDIR)/facile.cmxa ] ; then chmod a+r $(FACILEDIR)/facile.cmxa ; fi
++	if [ -e $(FACILEDIR)/facile.a ] ; then chmod a+r $(FACILEDIR)/facile.a ; fi
+ 
+ clean:
+ 	cd src; make clean

@@ -1,0 +1,3 @@
+version=3
+http://facile.recherche.enac.fr/distrib/ \
+        facile-([\d.]+).tar.gz

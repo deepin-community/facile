@@ -1,0 +1,39 @@
+Source: facile
+Priority: optional
+Maintainer: Debian OCaml Maintainers <debian-ocaml-maint@lists.debian.org>
+Build-Depends:
+ debhelper-compat (= 13),
+ ocaml-nox,
+ dh-ocaml
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+Section: ocaml
+Homepage: http://facile.recherche.enac.fr/
+Vcs-Git: https://salsa.debian.org/ocaml-team/facile.git
+Vcs-Browser: https://salsa.debian.org/ocaml-team/facile
+
+Package: libfacile-ocaml-dev
+Architecture: any
+Depends:
+ ${ocaml:Depends},
+ ${misc:Depends},
+ ${shlibs:Depends}
+Provides:
+ ${ocaml:Provides}
+Suggests: ocaml-findlib
+Description: functional constraint library implemented in Objective Caml
+ FaCiLe is a constraint programming library over integer finite domain
+ written in Objective Caml. It offers all usual facilities to create
+ and manipulate finite domain variables, arithmetic expressions and
+ constraints (possibly non-linear), built-in global constraints and
+ search goals. FaCiLe allows as well to build easily user-defined
+ constraints and goals (including recursive ones), making pervasive use
+ of OCaml higher-order functionals to provide a simple and flexible
+ interface for the user. As FaCiLe is an OCaml library and not "yet
+ another language", the user benefits from type inference and strong
+ typing discipline, high level of abstraction, modules and objects
+ system, as well as native code compilation efficiency, garbage
+ collection and replay debugger, all features of OCaml (among many
+ others) that allow to prototype and experiment quickly: modeling, data
+ processing and interface are implemented with the same powerful and
+ efficient language.
